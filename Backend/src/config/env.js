@@ -51,7 +51,7 @@ const envSchema = z.object({
 
   GEMINI_MODEL: z.preprocess(
     emptyStringToUndefined,
-    z.string().default('gemini-2.0-flash')
+    z.string().default('gemini-2.5-flash')
   ),
 
   GEMINI_BASE_URL: z.preprocess(
