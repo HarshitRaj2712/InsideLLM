@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { submitResearchRequest } from './services/researchApi.js';
 import './App.css';
 
@@ -39,6 +39,7 @@ function App() {
 
     setLoading(true);
     setError('');
+    setResult(null);
 
     try {
       const response = await submitResearchRequest(trimmedName);
@@ -51,6 +52,7 @@ function App() {
   };
 
   const report = result?.data?.decision ? result.data : null;
+  const workflowErrors = Array.isArray(result?.data?.errors) ? result.data.errors.filter(Boolean) : [];
   const normalizedCompanyName = report?.company || result?.data?.normalizedCompanyName || companyName.trim();
   const decisionLabel = showDecision(report);
 
@@ -103,6 +105,11 @@ function App() {
 
             {error ? <p className="status status-error">{error}</p> : null}
             {!error && result ? <p className="status status-success">{result.message}</p> : null}
+            {!error && workflowErrors.length > 0 ? (
+              <p className="status status-warning">
+                Workflow finished with {workflowErrors.length} partial issue(s). Report is based on available evidence.
+              </p>
+            ) : null}
           </form>
 
           <div className="workflow-card">
@@ -132,8 +139,27 @@ function App() {
             </div>
           </div>
 
-          {report ? (
+          {loading ? (
+            <div className="loading-state" role="status" aria-live="polite">
+              <p className="empty-title">Running research workflow...</p>
+              <p>
+                Collecting sources from Tavily and Alpha Vantage, then generating structured analysis with Gemini.
+                If one provider fails, the workflow still returns a best-effort report.
+              </p>
+            </div>
+          ) : report ? (
             <div className="report-grid">
+              {workflowErrors.length > 0 ? (
+                <section className="report-section report-warning" aria-live="polite">
+                  <h3>Partial data issues</h3>
+                  <ul>
+                    {workflowErrors.map((issue) => (
+                      <li key={issue}>{issue}</li>
+                    ))}
+                  </ul>
+                </section>
+              ) : null}
+
               <section className="report-section score-summary">
                 <div>
                   <span>Decision confidence</span>

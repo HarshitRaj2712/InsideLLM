@@ -170,6 +170,10 @@
   color: #fca5a5;
 }
 
+.status-warning {
+  color: #fcd34d;
+}
+
 .workflow-card {
   margin-top: 22px;
   padding: 22px;
@@ -311,6 +315,11 @@
   background: linear-gradient(135deg, rgba(15, 118, 110, 0.28), rgba(30, 41, 59, 0.68));
 }
 
+.report-warning {
+  border-color: rgba(252, 211, 77, 0.35);
+  background: linear-gradient(135deg, rgba(180, 83, 9, 0.2), rgba(30, 41, 59, 0.7));
+}
+
 .report-section p,
 .report-section li,
 .empty-state p,
@@ -371,6 +380,15 @@
   display: grid;
   gap: 16px;
   align-content: start;
+}
+
+.loading-state {
+  display: grid;
+  gap: 12px;
+  padding: 18px;
+  border-radius: 20px;
+  border: 1px solid rgba(125, 211, 252, 0.3);
+  background: linear-gradient(135deg, rgba(12, 74, 110, 0.32), rgba(30, 41, 59, 0.7));
 }
 
 .empty-title {
